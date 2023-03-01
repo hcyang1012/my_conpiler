@@ -9,11 +9,11 @@ class Lexer {
 
   void Advance();
   void SkipWhiteSpace();
-  std::unique_ptr<Token> NextToken();
-  std::unique_ptr<Token> AdvanceWith(std::unique_ptr<Token> token);
-  std::unique_ptr<Token> AdvanceCurrent(Token::Type type);
-  std::unique_ptr<Token> ParseId();
-  std::unique_ptr<Token> ParseNumber();
+  std::shared_ptr<Token> NextToken();
+  std::shared_ptr<Token> AdvanceWith(std::shared_ptr<Token> token);
+  std::shared_ptr<Token> AdvanceCurrent(Token::Type type);
+  std::shared_ptr<Token> ParseId();
+  std::shared_ptr<Token> ParseNumber();
   char Peek(size_t offset);
 
  private:

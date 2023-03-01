@@ -11,6 +11,8 @@ set(SOURCES
   ${SRC_DIR}/compiler.cpp
   ${SRC_DIR}/token.cpp
   ${SRC_DIR}/lexer.cpp
+  ${SRC_DIR}/parser.cpp
+  ${SRC_DIR}/ast.cpp
 )
 
 set(TARGET_NAME my_compiler)

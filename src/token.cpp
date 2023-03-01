@@ -33,49 +33,52 @@ Token::Token(const std::string& value, const Token::Type& type)
 const Token::Type& Token::GetType() const { return type_; }
 const std::string& Token::TypeName() const { return token_names.at(GetType()); }
 const std::string& Token::Value() const { return value_; }
-std::unique_ptr<Token> Token::Build(const Token::Type& type,
+std::shared_ptr<Token> Token::Build(const Token::Type& type,
                                     const std::string& value) {
   switch (type) {
     case TOKEN_ID:
-      return std::make_unique<TokenId>(value);
+      return std::make_shared<TokenId>(value);
     case TOKEN_EQUALS:
-      return std::make_unique<TokenEquals>(value);
+      return std::make_shared<TokenEquals>(value);
     case TOKEN_LPAREN:
-      return std::make_unique<TokenLParen>(value);
+      return std::make_shared<TokenLParen>(value);
     case TOKEN_RPAREN:
-      return std::make_unique<TokenRParen>(value);
+      return std::make_shared<TokenRParen>(value);
     case TOKEN_LBRACE:
-      return std::make_unique<TokenLBrace>(value);
+      return std::make_shared<TokenLBrace>(value);
     case TOKEN_RBRACE:
-      return std::make_unique<TokenRBrace>(value);
+      return std::make_shared<TokenRBrace>(value);
     case TOKEN_COLON:
-      return std::make_unique<TokenColon>(value);
+      return std::make_shared<TokenColon>(value);
     case TOKEN_COMMA:
-      return std::make_unique<TokenComma>(value);
+      return std::make_shared<TokenComma>(value);
     case TOKEN_LT:
-      return std::make_unique<TokenLT>(value);
+      return std::make_shared<TokenLT>(value);
     case TOKEN_GT:
-      return std::make_unique<TokenGT>(value);
+      return std::make_shared<TokenGT>(value);
     case TOKEN_RIGHT_ARROW:
-      return std::make_unique<TokenRightArrow>(value);
+      return std::make_shared<TokenRightArrow>(value);
     case TOKEN_INT:
-      return std::make_unique<TokenInt>(value);
+      return std::make_shared<TokenInt>(value);
     case TOKEN_SEMI:
-      return std::make_unique<TokenSemi>(value);
+      return std::make_shared<TokenSemi>(value);
     case TOKEN_EOF:
-      return std::make_unique<TokenEof>();
+      return std::make_shared<TokenEof>();
     default:
       LOG(ERROR) << "Invalid token type : " << type;
       return nullptr;
   }
 }
-std::unique_ptr<Token> Token::Build(const Type& type, const char value) {
+std::shared_ptr<Token> Token::Build(const Type& type, const char value) {
   return Build(type, std::string(1, value));
 }
 
 std::string Token::ToString() const {
   std::stringstream ss;
-  ss << "TOKEN('" << Value() << "')\t" << TypeName();
+  if(Value() != ""){
+    ss << "TOKEN('" << Value() << "') ";
+  }
+  ss << TypeName();
   return ss.str();
 }
 TokenId::TokenId(const std::string& value)

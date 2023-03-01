@@ -1,8 +1,9 @@
+#include <glog/logging.h>
+
 #include <algorithm>
 #include <cctype>
 #include <include/lexer.hpp>
 #include <memory>
-#include <glog/logging.h>
 
 namespace my_compiler {
 Lexer::Lexer(const std::string& src)
@@ -20,22 +21,22 @@ void Lexer::SkipWhiteSpace() {
     Advance();
   }
 }
-std::unique_ptr<Token> Lexer::NextToken() {
+std::shared_ptr<Token> Lexer::NextToken() {
   while (current_char_ != kCharNull) {
     SkipWhiteSpace();
     if (std::isalpha(current_char_)) {
-      return AdvanceWith(ParseId());
+      return ParseId();
     }
 
     if (std::isdigit(current_char_)) {
-      return AdvanceWith(ParseNumber());
+      return ParseNumber();
     }
 
     switch (current_char_) {
       case '=': {
         if (Peek(1) == '>') {
           return AdvanceWith(
-              Token::Build(Token::Type::TOKEN_RIGHT_ARROW, "=>"));
+              AdvanceWith(Token::Build(Token::Type::TOKEN_RIGHT_ARROW, "=>")));
         } else {
           return AdvanceWith(Token::Build(Token::Type::TOKEN_EQUALS, "="));
         }
@@ -58,26 +59,27 @@ std::unique_ptr<Token> Lexer::NextToken() {
         return AdvanceCurrent(Token::Type::TOKEN_GT);
       case ';':
         return AdvanceCurrent(Token::Type::TOKEN_SEMI);
-      case '\0': break;
+      case '\0':
+        break;
       default:
-        LOG(FATAL) << "Invalid character at " << current_idx_ << " : "
+        LOG(FATAL) << "[Lexer]: Invalid character at " << current_idx_ << " : "
                    << current_char_;
     }
   }
   return Token::Build(Token::Type::TOKEN_EOF);
 }
 
-std::unique_ptr<Token> Lexer::AdvanceWith(std::unique_ptr<Token> token) {
+std::shared_ptr<Token> Lexer::AdvanceWith(std::shared_ptr<Token> token) {
   Advance();
   return token;
 }
 
-std::unique_ptr<Token> Lexer::AdvanceCurrent(Token::Type type) {
+std::shared_ptr<Token> Lexer::AdvanceCurrent(Token::Type type) {
   auto result = Token::Build(type, std::string(1, current_char_));
   Advance();
   return result;
 }
-std::unique_ptr<Token> Lexer::ParseId() {
+std::shared_ptr<Token> Lexer::ParseId() {
   std::string value = "";
   while (std::isalnum(current_char_)) {
     value.push_back(current_char_);
@@ -86,7 +88,7 @@ std::unique_ptr<Token> Lexer::ParseId() {
   return Token::Build(Token::Type::TOKEN_ID, value);
 }
 
-std::unique_ptr<Token> Lexer::ParseNumber() {
+std::shared_ptr<Token> Lexer::ParseNumber() {
   std::string value = "";
   while (std::isdigit(current_char_)) {
     value.push_back(current_char_);

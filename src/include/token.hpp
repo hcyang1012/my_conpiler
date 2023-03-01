@@ -27,9 +27,9 @@ class Token {
   const std::string& TypeName() const;
   const Type& GetType() const;
   const std::string& Value() const;
-  static std::unique_ptr<Token> Build(const Type& type,
+  static std::shared_ptr<Token> Build(const Type& type,
                                       const std::string& value = "");
-  static std::unique_ptr<Token> Build(const Type& type, const char value);
+  static std::shared_ptr<Token> Build(const Type& type, const char value);
 
   std::string ToString() const;
 
