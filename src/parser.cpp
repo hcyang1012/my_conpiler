@@ -127,16 +127,6 @@ std::shared_ptr<Ast> Parser::ParseList() {
   return ast;
 }
 
-std::shared_ptr<AstCompound> Parser::ParseFunctionBlock() {
-  Eat(Token::Type::TOKEN_LBRACE);
-  auto ast = AstCompound::Build();
-  while (current_token_->GetType() != Token::Type::TOKEN_RBRACE) {
-    ast->AddChildren(ParseExpression());
-  }
-  Eat(Token::Type::TOKEN_RBRACE);
-  return ast;
-}
-
 std::shared_ptr<AstInt> Parser::ParseInt() {
   int value = std::stoi(current_token_->Value());
   Eat(Token::Type::TOKEN_INT);

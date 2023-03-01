@@ -13,7 +13,6 @@ class Parser {
   std::shared_ptr<Ast> ParseExpression();
   std::shared_ptr<Ast> ParseId();
   std::shared_ptr<Ast> ParseList();
-  std::shared_ptr<AstCompound> ParseFunctionBlock();
   std::shared_ptr<AstInt> ParseInt();
 
  private:
